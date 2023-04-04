@@ -29,16 +29,6 @@ namespace MyPlugin
             Harmony.CreateAndPatchAll(typeof(Plugin));
         }
 
-        [HarmonyPrefix, HarmonyPatch(typeof(MainMenu), "Update")]
-        public static void MainMenu_Update(MainMenu __instance)
-        {
-            if (Input.GetKeyDown(KeyCode.Alpha9))
-            {
-                logger.LogInfo("You pressed " + KeyCode.Alpha9);
-                __instance.MenuNavigation.SetGroupActive(1);
-            }
-        }
-
         [HarmonyPostfix, HarmonyPatch(typeof(BlueprintConstructionPopup), "SetupInventory")]
         public static void BlueprintConstructionPopup_SetupInventory(BlueprintConstructionPopup __instance, InGameCardBase _Card)
         {
