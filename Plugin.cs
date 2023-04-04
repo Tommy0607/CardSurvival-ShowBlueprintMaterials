@@ -56,12 +56,12 @@ namespace MyPlugin
                     }
                 }
             }
-            var content = "";
-            foreach (var nameSize in elementSizeDict)
+            var tooltipContent = "";
+            foreach (var elementSize in elementSizeDict)
             {
-                content += nameSize.Value + "x" + nameSize.Key + "\n";
+                tooltipContent += elementSize.Value + "x" + elementSize.Key + "\n";
             }
-            content = content.Substring(0, content.Length - 1);
+            tooltipContent = tooltipContent.Substring(0, tooltipContent.Length - 1);
             if (showElementsIcon == null)
             {
                 GameObject gameObject = new GameObject();
@@ -74,13 +74,12 @@ namespace MyPlugin
                 Image image = gameObject.AddComponent<Image>();
                 image.sprite = sprite;
                 var tooltip = gameObject.AddComponent<TooltipProvider>();
-                tooltip.SetTooltip(TOOLTIP_TITLE, content, "");
+                tooltip.SetTooltip(TOOLTIP_TITLE, tooltipContent, "");
                 RectTransform rectTransform = gameObject.GetComponent<RectTransform>();
-                rectTransform.pivot = Vector2.one;
-                rectTransform.sizeDelta = new Vector2(64, 64);
                 rectTransform.SetParent(__instance.transform);
                 rectTransform.localScale = new Vector3(1, 1, 1);
                 rectTransform.pivot = new Vector2(0, 1);
+                rectTransform.sizeDelta = new Vector2(64, 64);
                 rectTransform.anchorMin = rectTransform.anchorMax = new Vector2(0, 1);
                 rectTransform.anchoredPosition = new Vector2(64, -62);
                 gameObject.SetActive(true);
@@ -88,22 +87,22 @@ namespace MyPlugin
             }
             else
             {
-                showElementsIcon.GetComponent<TooltipProvider>().SetTooltip(TOOLTIP_TITLE, content, "");
+                showElementsIcon.GetComponent<TooltipProvider>().SetTooltip(TOOLTIP_TITLE, tooltipContent, "");
             }
 
         }
 
-        public static byte[] ReadBytesFromStream(Stream input)
+        private static byte[] ReadBytesFromStream(Stream input)
         {
-            byte[] buffer = new byte[16*1024];
-            using (MemoryStream ms = new MemoryStream())
+            var buffer = new byte[16*1024];
+            using (var memoryStream = new MemoryStream())
             {
                 int read;
                 while ((read = input.Read(buffer, 0, buffer.Length)) > 0)
                 {
-                    ms.Write(buffer, 0, read);
+                    memoryStream.Write(buffer, 0, read);
                 }
-                return ms.ToArray();
+                return memoryStream.ToArray();
             }
         }
 
